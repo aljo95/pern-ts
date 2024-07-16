@@ -1,0 +1,10 @@
+{
+  "description": "root-concurrently",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "concurrently \"cd express-server && npm run build && npm run start\" \"cd react-client && npm start\" "
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
