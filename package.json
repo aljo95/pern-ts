@@ -2,7 +2,7 @@
   "description": "root-concurrently",
   "scripts": {
     "build": "npx tsc",
-    "start": "concurrently \"cd express-server && npm run build && npm run start\" \"cd react-client && npm start\" "
+    "start": "concurrently \"cd react-client && npm run dev\" \"cd express-server && npm run build && npm run start\" "
   },
   "dependencies": {
     "concurrently": "^8.2.2"
