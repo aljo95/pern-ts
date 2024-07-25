@@ -11,10 +11,6 @@ dotenv.config()
 
 const app: Express = express();
 
-//app.use(express.json());
-const corsOptions = {
-  
-}
 app.use(cors());
 
 app.use(

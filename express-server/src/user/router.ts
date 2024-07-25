@@ -15,18 +15,27 @@ export const userRouter = router({
         return users
     }),
 
-    getUserById: publicProcedure.input((val: unknown) => {
-        if (typeof val === 'string') return val
-        throw new Error(`Invalid input: ${typeof val}`)
-    }).query((req: any) => {
-        const reqInput = req.input
+    getUserById: publicProcedure
+        .input(
+            z
+            .object({
+                text: z.string().nullish(),
+            })
+            .nullish(),
+        )
+    .query((req: any) => {
+        
+        const reqInput = req.input.text
         let user: any = ""
         for (let i=0; i<users.length; i++) {
-            if (users[i].id === reqInput) {
-                user = users[i]
+            if (users[i].id === reqInput) { 
+                user = users[i].name
                 break
             }
         }
+        console.log("user: " + user)
+        if (typeof user !== 'string') return;
+        
         return user
     }),
 

@@ -4,32 +4,28 @@ import { trpc } from './trpc'
 
 function App() {
   const [inputNumber, setInputNumber] = useState<string>("")
-  const [inputFunal, setInputFinal] = useState<string>("")
+  //const [inputFinal, setInputFinal] = useState<string>("")
   const [previousNumber, setPreviousNumber] = useState<string>("")
 
 
-  useEffect(() => { 
-    //const fetchUser = , made into IIFE instead 
-    (async() => {
-      const user = await trpc.user.getUserById.query(inputFunal)
-      if (!user) return
-      console.log(user)
-      setPreviousNumber(user.name)
-    })();
-  }, [inputFunal])
+  const { isPending, error, data } = trpc.user.getUserById.useQuery({text: previousNumber}, { 
+    refetchOnWindowFocus: false
+  })
+  console.log(data)
 
+  if (isPending) return "loading.."
+  if (error) return "ERROR" + error.message
 
   const handleSubmit: any = (e: InputEvent) => {
     e.preventDefault();
     //send number to server
     console.log(+inputNumber) //parse to int
-    setInputFinal(inputNumber)
+    setPreviousNumber(inputNumber)
     setInputNumber("")
   }
 
-
   return (
-    <>
+    <div id="container">
       <h1 id="title">Simple React+Express TypeScript example. +postgreSQL +tRPC</h1>
       <form id="form-container" onSubmit={handleSubmit}>
         <label>Input ID: 
@@ -42,13 +38,17 @@ function App() {
       </div>
 
       <div id="previous-container">
-        {previousNumber ? 
-          <p>Your selected ID corresponds with user: {previousNumber}</p>
+        {data ?
+          <p>{data}</p> 
         :
-          <p></p>
+          previousNumber ?
+            <p>invalid number</p>
+            :
+            <p>nothing fetched</p>
         }
+        
       </div>
-    </>
+    </div>
   )
 }
 

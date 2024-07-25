@@ -30,3 +30,11 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+#container {
+  border: solid;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
