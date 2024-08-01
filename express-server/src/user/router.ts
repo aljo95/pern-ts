@@ -12,7 +12,7 @@ import { db } from "../pgdb";
 export const userRouter = router({
   getUsers: publicProcedure.query(async () => {
     const db_users = await db.query("SELECT * FROM users");
-    //return users; from pseudo db
+    //return users; from pseudo db.
     return db_users;
   }),
 
