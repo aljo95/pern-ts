@@ -13,6 +13,7 @@ module.exports = {
   query: (text: string, params: any) => pool.query(text, params),
 };
 */
+
 export const db = {
   query: (text: string, params?: any) => pool.query(text, params),
 };
