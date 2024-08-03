@@ -1,55 +1,31 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import { trpc } from './trpc'
+//import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import "./App.css";
+import { trpc } from "./trpc";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
+//import GetByIDComponent from "./GetByIDComponent";
+import { Greeting } from "./Greeting";
 
 function App() {
-  const [inputNumber, setInputNumber] = useState<string>("")
-  //const [inputFinal, setInputFinal] = useState<string>("")
-  const [previousNumber, setPreviousNumber] = useState<string>("")
-
-
-  const { isPending, error, data } = trpc.user.getUserById.useQuery({text: previousNumber}, { 
-    refetchOnWindowFocus: false
-  })
-  console.log(data)
-
-  if (isPending) return "loading.."
-  if (error) return "ERROR" + error.message
-
-  const handleSubmit: any = (e: InputEvent) => {
-    e.preventDefault();
-    //send number to server
-    console.log(+inputNumber) //parse to int
-    setPreviousNumber(inputNumber)
-    setInputNumber("")
-  }
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: "http://localhost:8000/trpc",
+        }),
+      ],
+    })
+  );
 
   return (
-    <div id="container">
-      <h1 id="title">Simple React+Express TypeScript example. +postgreSQL +tRPC</h1>
-      <form id="form-container" onSubmit={handleSubmit}>
-        <label>Input ID: 
-          <input type="number" value={inputNumber} onChange={(e) => setInputNumber(e.target.value)} />
-        </label>
-        <input type="submit" value="submit"/>
-      </form>
-      <div id="return-container">
-        <p></p>
-      </div>
-
-      <div id="previous-container">
-        {data ?
-          <p>{data}</p> 
-        :
-          previousNumber ?
-            <p>invalid number</p>
-            :
-            <p>nothing fetched</p>
-        }
-        
-      </div>
-    </div>
-  )
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <Greeting />
+      </QueryClientProvider>
+    </trpc.Provider>
+  );
 }
 
-export default App
+export default App;

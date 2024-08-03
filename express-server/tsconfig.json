@@ -21,6 +21,7 @@
     "strict": true /* Enable all strict type-checking options. */,
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    //"composite": true
   },
   "exclude": ["client", "dist", "node_modules"]
 }

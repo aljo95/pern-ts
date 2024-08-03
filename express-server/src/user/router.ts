@@ -11,9 +11,18 @@ import { db } from "../pgdb";
 
 export const userRouter = router({
   getUsers: publicProcedure.query(async () => {
-    const db_users = await db.query("SELECT * FROM users");
-    //return users; from pseudo db.
-    return db_users;
+    let db_users: any;
+    let res: { name: string; age: number; id: number }[];
+    try {
+      db_users = await db.pool.query("SELECT * FROM users;");
+      res = db_users.rows;
+      console.log(res);
+      return res;
+    } catch {
+      console.log("db query failed :(");
+      return "failed query";
+    }
+    //return users;
   }),
 
   getUserById: publicProcedure
@@ -25,16 +34,17 @@ export const userRouter = router({
         .nullish()
     )
     .query((req: any) => {
+      console.log("yayayaya");
       const reqInput = req.input.text;
-      let user: any = "";
+      let user: string = "";
       for (let i = 0; i < users.length; i++) {
         if (users[i].id === reqInput) {
           user = users[i].name;
           break;
         }
       }
-      console.log("user: " + user);
-      if (typeof user !== "string") return;
+      //console.log("user: " + user);
+      //if (typeof user !== "string") return;
 
       return user;
     }),
@@ -50,5 +60,16 @@ export const userRouter = router({
       };
       users.push(user);
       return user;
+    }),
+  greetings: publicProcedure
+    .input(
+      z.object({
+        msg: z.string().optional(),
+      })
+    )
+    .query(({ input }) => {
+      return {
+        msg: "hello " + input.msg,
+      };
     }),
 });

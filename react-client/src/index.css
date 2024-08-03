@@ -37,4 +37,11 @@ body {
   display: flex;
   flex-direction: column;
 }
-
+#greetings-container {
+  outline: auto;
+  width: 20%;
+}
+#all-container {
+  display: flex;
+  flex-direction: column;
+}
