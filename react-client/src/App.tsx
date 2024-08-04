@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 //import GetByIDComponent from "./GetByIDComponent";
 import { Greeting } from "./Greeting";
+import GetByIDComponent from "./GetByIDComponent";
 
 function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -23,6 +24,7 @@ function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <Greeting />
+        <GetByIDComponent />
       </QueryClientProvider>
     </trpc.Provider>
   );

@@ -33,9 +33,12 @@ export const userRouter = router({
         })
         .nullish()
     )
-    .query((req: any) => {
-      console.log("yayayaya");
+    .query(async (req: any) => {
       const reqInput = req.input.text;
+      if (!reqInput) return "no input";
+
+      /*
+      console.log("reqInput: " + reqInput);
       let user: string = "";
       for (let i = 0; i < users.length; i++) {
         if (users[i].id === reqInput) {
@@ -43,10 +46,16 @@ export const userRouter = router({
           break;
         }
       }
-      //console.log("user: " + user);
-      //if (typeof user !== "string") return;
-
+      console.log("user: " + user);
       return user;
+      */
+
+      const db_user = await db.pool.query(
+        "SELECT name FROM users WHERE id = $1;",
+        [reqInput]
+      );
+      if (!db_user.rows[0]) return "no user found";
+      return db_user.rows[0].name;
     }),
 
   createUser: publicProcedure

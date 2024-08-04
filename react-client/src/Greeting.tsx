@@ -16,7 +16,7 @@ export function Greeting() {
   const greeting: PostgresUsersQuery[] = trpc.user.getUsers.useQuery();
   if (greeting.data === undefined) return <></>;
 
-  console.log("trpc data: " + greeting.data[1]);
+  //console.log("trpc data: " + greeting.data[1]);
 
   return (
     <div id="greetings-container">
@@ -25,8 +25,9 @@ export function Greeting() {
         {greeting.data.map((e) => {
           return (
             <div key={e.id}>
-              <h4>{e.name}</h4>
-              <h5>{e.age}</h5>
+              <h4>
+                {e.name} {e.age}
+              </h4>
             </div>
           );
         })}

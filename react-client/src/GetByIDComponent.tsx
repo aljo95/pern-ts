@@ -5,28 +5,31 @@ import { trpc } from "./trpc";
 function GetByIDComponent() {
   const [inputNumber, setInputNumber] = useState<string>("");
   const [previousNumber, setPreviousNumber] = useState<string>("");
-  const [inputFinal, setInputFinal] = useState<string>("");
 
-  /*
-  const user: number = trpc.user.getUserById.useQuery({
-    text: "2",
-  });
-  if (!user) return;
-  console.log(user);
-  setPreviousNumber(user.name);
-    */
-  const handleSubmit: void = (e: InputEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data, refetch } = trpc.user.getUserById.useQuery(
+    {
+      text: inputNumber,
+    },
+    {
+      enabled: false,
+    }
+  );
+
+  const handleSubmit: void = async (e: InputEvent) => {
     e.preventDefault();
-    console.log(+inputNumber); //parse to int
-    setInputFinal(inputNumber);
+    const res = await refetch();
+    console.log(res.data);
+    setPreviousNumber(res.data);
+
     setInputNumber("");
   };
 
   return (
     <div id="container">
-      <h1 id="title">
+      <h2 id="title">
         Simple React+Express TypeScript example. +postgreSQL +tRPC
-      </h1>
+      </h2>
       <form id="form-container" onSubmit={handleSubmit}>
         <label>
           Input ID:
@@ -46,7 +49,6 @@ function GetByIDComponent() {
           <></>
         )}
       </div>
-      <div id="all users"></div>
     </div>
   );
 }
